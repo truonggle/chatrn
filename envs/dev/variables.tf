@@ -1,0 +1,62 @@
+variable "project_id" {
+  description = "GCP Project ID"
+  type        = string
+}
+
+variable "region" {
+  description = "Default GCP region for resources"
+  type        = string
+}
+
+variable "node_zones" {
+  description = "List of zones for GKE node pools"
+  type        = list(string)
+}
+
+variable "project_name" {
+  description = "GCP Project Name"
+  type        = string
+}
+
+variable "env" {
+  description = "Deployment environment (e.g., dev, staging, prod)"
+  type        = string
+}
+
+variable "master_ipv4_cidr" {
+  description = "A dedicated /28 IP range for the GKE private master"
+  type        = string
+  default     = "172.16.0.0/28"
+}
+
+# --- Node Pool variables ---
+
+variable "cpu_machine_type" {
+  description = "Machine type for the primary CPU node pool"
+  type        = string
+  default     = "e2-standard-4"
+}
+
+variable "gpu_machine_type" {
+  description = "Machine type for the GPU pool (must support the GPU type)"
+  type        = string
+  default     = "n1-standard-4"
+}
+
+variable "gpu_type" {
+  description = "The type of GPU to attach (e.g., 'nvidia-tesla-t4')"
+  type        = string
+  default     = "nvidia-tesla-t4"
+}
+
+variable "disk_type" {
+  description = "Type of disk to use for instances"
+  type        = string
+  default     = "pd-standard"
+}
+
+variable "image_type" {
+  description = "The image type for the GKE nodes"
+  type        = string
+  default     = "COS_CONTAINERD"
+}
