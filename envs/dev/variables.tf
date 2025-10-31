@@ -23,10 +23,28 @@ variable "env" {
   type        = string
 }
 
-variable "master_ipv4_cidr" {
+variable "gke_master_ipv4_cidr" {
   description = "A dedicated /28 IP range for the GKE private master"
   type        = string
   default     = "172.16.0.0/28"
+}
+
+variable "gke_subnet_cidr" {
+  description = "Primary range for the GKE subnet (where the Node VMs will get their IPs)"
+  type        = string
+  default     = "10.10.0.0/16"
+}
+
+variable "pods_ip_cidr_range" {
+  description = "Secondary range for the GKE pods"
+  type        = string
+  default     = "10.20.0.0/16"
+}
+
+variable "service_ip_cidr_range" {
+  description = "Secondary range for the GKE services"
+  type        = string
+  default     = "10.30.0.0/20"
 }
 
 # --- Node Pool variables ---

@@ -14,8 +14,8 @@ resource "google_container_cluster" "alpha" {
   project = var.project_id
   location = var.region
 
-  # network = var.vpc_self_link
-  # subnetwork = var.subnet_self_link
+  network = var.vpc_self_link
+  subnetwork = var.gke_subnet_self_link
   node_locations = var.node_zones
   initial_node_count = 1
 
@@ -24,7 +24,7 @@ resource "google_container_cluster" "alpha" {
   private_cluster_config {
     enable_private_endpoint = true
     enable_private_nodes    = true
-    master_ipv4_cidr_block  = var.master_ipv4_cidr
+    master_ipv4_cidr_block  = var.gke_master_ipv4_cidr
   }
 
   master_authorized_networks_config {
@@ -59,7 +59,7 @@ resource "google_gke_hub_membership" "gke_hub" {
   depends_on = [
     google_container_cluster.alpha,
     google_container_node_pool.cpu_node_pool,
-    google_container_node_pool.gpu_node_pool,
+    # google_container_node_pool.gpu_node_pool,
     google_project_service.gke_apis
   ]
 }
