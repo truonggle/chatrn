@@ -13,13 +13,13 @@ resource "google_container_cluster" "alpha" {
   name = "${var.project_name}-${var.env}-alpha-gke"
   project = var.project_id
   location = var.region
+  node_locations = var.node_zones
 
   network = var.vpc_self_link
   subnetwork = var.gke_subnet_self_link
-  node_locations = var.node_zones
-  initial_node_count = 1
 
   remove_default_node_pool = true
+  initial_node_count = 1
 
   private_cluster_config {
     enable_private_endpoint = true
@@ -28,6 +28,11 @@ resource "google_container_cluster" "alpha" {
   }
 
   master_authorized_networks_config {
+  }
+
+  ip_allocation_policy {
+    cluster_secondary_range_name = var.pods_ip_range_name
+    services_secondary_range_name = var.services_ip_range_name
   }
 
   workload_identity_config {

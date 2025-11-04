@@ -47,7 +47,7 @@ variable "service_ip_cidr_range" {
   default     = "10.30.0.0/20"
 }
 
-# --- Node Pool variables ---
+# --- Node Pools ---
 
 variable "cpu_machine_type" {
   description = "Machine type for the primary CPU node pool"
@@ -77,4 +77,37 @@ variable "image_type" {
   description = "The image type for the GKE nodes"
   type        = string
   default     = "COS_CONTAINERD"
+}
+
+# --- Artifact Registry ---
+
+variable "artifact_registry_description" {
+  description = "Description for the Artifact Registry repository"
+  type        = string
+  default     = "Docker repository for dev environment"
+}
+
+# --- CloudSQL ---
+
+variable "cloudsql_database_tier" {
+  description = "The machine type for CloudSQL instance"
+  type        = string
+  default     = "db-f1-micro"
+}
+
+variable "cloudsql_disk_size" {
+  description = "Disk size in GB for CloudSQL instance"
+  type        = number
+  default     = 10
+}
+
+# --- Secret Manager ---
+
+variable "secrets" {
+  description = "Map of secret names to secret values"
+  type        = map(string)
+  sensitive   = true
+  default     = {
+    db-password = "dev_db_password"
+  }
 }
