@@ -12,5 +12,12 @@ variable "image_type" { type = string }
 variable "gke_node_sa_email" { type = string }
 variable "vpc_self_link" { type = string }
 variable "gke_subnet_self_link" { type = string }
+# variable "master_authorized_networks_config" {
+#   type = list(object({
+#     cidr_block   = string
+#     display_name = string
+#   }))
+# }
 variable "pods_ip_range_name" { type = string }
 variable "services_ip_range_name" { type = string }
+variable "app_workload_sa_email" { type = string }

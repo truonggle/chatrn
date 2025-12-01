@@ -17,6 +17,7 @@ resource "google_container_node_pool" "cpu_node_pool" {
     disk_size_gb    = 50
     image_type      = var.image_type
 
+    // For custom sa, gke nodes authenticate using sa credentials, not OAuth scopes.
     service_account = var.gke_node_sa_email
     oauth_scopes    = []
   }

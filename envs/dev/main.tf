@@ -3,6 +3,8 @@ module "iam" {
   env          = var.env
   project_id   = var.project_id
   project_name = var.project_name
+  k8s_namespace = var.k8s_namespace
+  k8s_service_account = var.k8s_service_account
 }
 
 module "vpc" {
@@ -33,9 +35,11 @@ module "gke" {
   image_type           = var.image_type
 
   gke_node_sa_email    = module.iam.gke_node_sa_email
+  app_workload_sa_email = module.iam.app_workload_sa_email
   vpc_self_link        = module.vpc.vpc_self_link
   gke_subnet_self_link = module.vpc.gke_subnet_self_link
 
+  # master_authorized_networks_config = var.master_authorized_networks_config
   pods_ip_range_name = module.vpc.pods_ip_range_name
   services_ip_range_name = module.vpc.services_ip_range_name
 
@@ -52,6 +56,14 @@ module "artifact_registry" {
   region = var.region
   env = var.env
   description = var.artifact_registry_description
+  artifact_registry_custom_role_id = module.iam.artifact_registry_custom_role_id
+  artifact_registry_sa_email = module.iam.artifact_registry_sa_email
+  app_workload_sa_email = module.iam.app_workload_sa_email
+  gke_node_sa_email = module.iam.gke_node_sa_email
+
+  depends_on = [
+    module.iam
+  ]
 }
 
 module "cloudsql" {
@@ -83,6 +95,24 @@ module "secret_manager" {
 
   depends_on = [
     module.cloudsql,
+    module.iam
+  ]
+}
+
+module "cloud_storage" {
+  source = "../../modules/cloud_storage"
+  project_id = var.project_id
+  project_name = var.project_name
+  region = var.region
+  env    = var.env
+
+  bucket_name_suffix = var.bucket_name_suffix
+
+  app_workload_sa_email = module.iam.app_workload_sa_email
+  gcs_custom_role_id = module.iam.gcs_custom_role_id
+  gcs_sa_email = module.iam.gcs_sa_email
+
+  depends_on = [
     module.iam
   ]
 }

@@ -17,3 +17,8 @@ output "gke_hub_membership_name" {
   description = "The full resource name of the GKE Hub membership"
   value       = google_gke_hub_membership.gke_hub.name
 }
+
+output "membership_id" {
+  description = "The membership ID of the GKE Hub membership"
+  value       = google_gke_hub_membership.gke_hub.membership_id
+}

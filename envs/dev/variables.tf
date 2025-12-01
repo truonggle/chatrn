@@ -35,6 +35,14 @@ variable "gke_subnet_cidr" {
   default     = "10.10.0.0/16"
 }
 
+# variable "master_authorized_networks_config" {
+#   description = "List of CIDR blocks allowed to access the GKE master endpoint"
+#   type = list(object({
+#     cidr_block   = string
+#     display_name = string
+#   }))
+# }
+
 variable "pods_ip_cidr_range" {
   description = "Secondary range for the GKE pods"
   type        = string
@@ -110,4 +118,26 @@ variable "secrets" {
   default     = {
     db-password = "dev_db_password"
   }
+}
+
+# --- Cloud Storage ---
+
+variable "bucket_name_suffix" {
+  description = "Suffix for the main data GCS bucket"
+  type        = string
+  default     = "data-bucket"
+}
+
+# --- Kubernetes ---
+
+variable "k8s_service_account" {
+  description = "Kubernetes service account name for application workloads"
+  type        = string
+  default     = "app-workload-sa"
+}
+
+variable "k8s_namespace" {
+  description = "Kubernetes namespace for application workloads"
+  type        = string
+  default     = "default"
 }

@@ -3,3 +3,7 @@ variable "project_name" { type = string }
 variable "region" { type = string }
 variable "env" { type = string }
 variable "description" { type = string }
+variable "artifact_registry_custom_role_id" { type = string }
+variable "artifact_registry_sa_email" { type = string }
+variable "app_workload_sa_email" { type = string }
+variable "gke_node_sa_email" { type = string }

@@ -28,6 +28,20 @@ resource "google_container_cluster" "alpha" {
   }
 
   master_authorized_networks_config {
+    cidr_blocks {
+      # cidr_block    = var.master_authorized_networks_config[0].cidr_block
+      # display_name  = var.master_authorized_networks_config[0].display_name
+      cidr_block = "10.0.0.0/8"
+      display_name = "RFC1918 - Class A"
+    }
+    cidr_blocks {
+      cidr_block = "172.16.0.0/12"
+      display_name = "RFC1918 - Class B"
+    }
+    cidr_blocks {
+      cidr_block   = "192.168.0.0/16"
+      display_name = "RFC1918 - Class C"
+    }
   }
 
   ip_allocation_policy {
@@ -35,12 +49,25 @@ resource "google_container_cluster" "alpha" {
     services_secondary_range_name = var.services_ip_range_name
   }
 
+  // enable workload identity on the cluster
   workload_identity_config {
     workload_pool = "${var.project_id}.svc.id.goog"
   }
 
   release_channel {
     channel = "REGULAR"
+  }
+
+  addons_config {
+    ray_operator_config {
+      enabled = true
+      ray_cluster_logging_config {
+        enabled = true
+      }
+      ray_cluster_monitoring_config {
+        enabled = true
+      }
+    }
   }
 
   logging_service = "logging.googleapis.com/kubernetes"

@@ -1,0 +1,20 @@
+steps:
+  # Build and tag the image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'build',
+        '-t', 'asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ai-chatbot-backend:latest',
+        '.'
+      ]
+
+  # Push it to Artifact Registry (not Container Registry)
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'push',
+        'asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ai-chatbot-backend:latest'
+      ]
+
+images:
+  - 'asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ai-chatbot-backend:latest'

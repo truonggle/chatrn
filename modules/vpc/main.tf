@@ -41,11 +41,10 @@ resource "google_compute_firewall" "allow_internal" {
 
   allow {
     protocol = "tcp"
-    ports = ["0-65535"]
+    ports = ["443", "10250", "10255"]
   }
   allow {
     protocol = "udp"
-    ports = ["0-65535"]
   }
   allow { protocol = "icmp" }
 
@@ -75,7 +74,6 @@ resource "google_compute_firewall" "allow_master_to_nodes" {
   }
   allow {
     protocol = "udp"
-    ports    = ["4789"]
   }
 
   source_ranges = [ var.gke_master_ipv4_cidr ]
@@ -86,7 +84,7 @@ resource "google_compute_firewall" "allow_master_to_nodes" {
 
 resource "google_compute_router" "router" {
   name    = "${var.project_name}-${var.env}-router"
-  network = google_compute_network.vpc.id
+  network = google_compute_network.vpc.name
   region  = var.region
 }
 

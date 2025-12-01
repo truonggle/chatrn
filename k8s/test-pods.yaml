@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pullable-pod
+  labels:
+    demo: pullable
+spec:
+  serviceAccountName: app-workload-sa
+  containers:
+    - name: backend
+#      image: gcr.io/dev-ops-0/ai-chatbot-backend:latest
+      image: asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ai-chatbot-backend:latest
+      command: ["sleep", "3600"]
+  restartPolicy: Never
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: non-pullable-pod
+  labels:
+    demo: non-pullable
+spec:
+  serviceAccountName: app-workload-sa-dummy
+  containers:
+    - name: backend
+#      image: gcr.io/dev-ops-0/ai-chatbot-backend:latest
+      image: asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ai-chatbot-backend:latest
+      command: ["sleep", "3600"]
+  restartPolicy: Never
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gcs-test-pod
+spec:
+  serviceAccountName: app-workload-sa   # try with different SAs
+  containers:
+    - name: test
+      image: google/cloud-sdk:slim
+      command: ["/bin/sh"]
+      args:
+        - "-c"
+        - |
+          echo "Testing IAM..."
+          # Try listing objects (read)
+          if gsutil ls gs://dev-ops-0-dev-data-bucket/; then
+            echo "LIST success"
+          else
+            echo "LIST failed"
+          fi
+          
+          # Try uploading (write)
+          echo "hello world" > /tmp/test.txt
+          if gsutil cp /tmp/test.txt gs://dev-ops-0-dev-data-bucket/; then
+            echo "UPLOAD success"
+          else
+            echo "UPLOAD failed"
+          fi
+  restartPolicy: Never
