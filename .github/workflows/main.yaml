@@ -50,6 +50,16 @@ jobs:
           docker build -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}-dev-repo/ray-chatbot:${{ github.sha }} .
           docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}-dev-repo/ray-chatbot:${{ github.sha }}
 
+      - name: Build and Push Backend image
+        run: |
+          docker build -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}-dev-repo/ai-chatbot-backend:${{ github.sha }} -f backend/Dockerfile .
+          docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}-dev-repo/ai-chatbot-backend:${{ github.sha }}
+
+      - name: Build and Push Frontend image
+        run: |
+          docker build -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}-dev-repo/ai-chatbot-frontend:${{ github.sha }} -f frontend/Dockerfile .
+          docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}-dev-repo/ai-chatbot-frontend:${{ github.sha }}
+
 #      - name: Build Ray Model image
 #        run: |
 #          gcloud builds submit \
