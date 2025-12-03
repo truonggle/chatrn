@@ -52,12 +52,12 @@ jobs:
 
       - name: Build and Push Backend image
         run: |
-          docker build -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}-dev-repo/ai-chatbot-backend:${{ github.sha }} -f app/backend/Dockerfile .
+          docker build -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}-dev-repo/ai-chatbot-backend:${{ github.sha }} -f app/backend/Dockerfile ./app/backend
           docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}-dev-repo/ai-chatbot-backend:${{ github.sha }}
 
       - name: Build and Push Frontend image
         run: |
-          docker build -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}-dev-repo/ai-chatbot-frontend:${{ github.sha }} -f /app/frontend/Dockerfile .
+          docker build -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}-dev-repo/ai-chatbot-frontend:${{ github.sha }} -f /app/frontend/Dockerfile ./app/frontend
           docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}-dev-repo/ai-chatbot-frontend:${{ github.sha }}
 
 #      - name: Build Ray Model image
