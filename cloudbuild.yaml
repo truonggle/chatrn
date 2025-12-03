@@ -4,7 +4,7 @@ steps:
     args:
       [
         'build',
-        '-t', 'asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ray-chatbot:latest',
+        '-t', 'asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ray-chatbot:${_TAG}',
         '.'
       ]
 
@@ -13,8 +13,8 @@ steps:
     args:
       [
         'push',
-        'asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ray-chatbot:latest'
+        'asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ray-chatbot:${_TAG}'
       ]
 
 images:
-  - 'asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ray-chatbot:latest'
+  - 'asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ray-chatbot:${_TAG}'

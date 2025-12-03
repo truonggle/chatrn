@@ -1,0 +1,12 @@
+project_id: "dev-ops-0"
+cluster_name: "dev-ops-0-dev-alpha-gke"
+location: "global"
+
+backend_image_base: "asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ai-chatbot-backend"
+frontend_image_base: "asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ai-chatbot-frontend"
+ray_image_base: "asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ray-chatbot"
+
+backend_replicas: 2
+frontend_replicas: 2
+ray_min_replicas: 1
+ray_max_replicas: 2

@@ -1,0 +1,9 @@
+---
+- name: Apply Kubernetes Manifests
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', item) | from_yaml_all | list }}"
+    kubeconfig: "{{ lookup('env', 'K8S_AUTH_KUBECONFIG') }}"
+  loop: "{{ templates }}"
+  loop_control:
+    label: "{{ item }}"

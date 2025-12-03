@@ -1,0 +1,72 @@
+apiVersion: ray.io/v1
+kind: RayService
+metadata:
+  name: ray-service
+  namespace: default
+spec:
+  serviceUnhealthySecondThreshold: 300
+  deploymentUnhealthySecondThreshold: 300
+  serveConfigV2: |
+    applications:
+      - name: app1
+        route_prefix: /
+        import_path: models.model_deployment:chat_model
+        deployments:
+          - name: ChatModel
+            num_replicas: 1
+            user_config:
+              model_name: microsoft/DialoGPT-medium
+              generation_config:
+                temperature: 0.9
+            ray_actor_options:
+              num_cpus: 0.5
+              num_gpus: 0
+  rayClusterConfig:
+    rayVersion: 2.52.0
+    enableInTreeAutoscaling: true
+    headGroupSpec:
+      rayStartParams:
+        ray-client-server-port: '10001'
+        dashboard-host: '0.0.0.0'
+        num-cpus: '0'
+      template:
+        spec:
+          containers:
+            - name: ray-head
+              image: "{{ ray_image_base }}:{{ ray_tag }}"
+              imagePullPolicy: Always
+              resources:
+                limits:
+                  cpu: "2"
+                  memory: "4Gi"
+                requests:
+                  cpu: "2"
+                  memory: "4Gi"
+              ports:
+                - containerPort: 6379
+                  name: gcs-server
+                - containerPort: 8265
+                  name: dashboard
+                - containerPort: 10001
+                  name: client
+                - containerPort: 8000
+                  name: serve
+    workerGroupSpecs:
+      - replicas: {{ ray_min_replicas }}
+        minReplicas: {{ ray_min_replicas }}
+        maxReplicas: {{ ray_max_replicas }}
+        groupName: worker-group
+        rayStartParams: {}
+        template:
+          spec:
+            containers:
+              - name: ray-worker
+                image: "{{ ray_image_base }}:{{ ray_tag }}"
+                imagePullPolicy: Always
+                resources:
+                  limits:
+                    cpu: "1"
+                    memory: "4Gi"
+                  requests:
+                    cpu: "500m"
+                    memory: "4Gi"

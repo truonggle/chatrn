@@ -4,7 +4,7 @@ steps:
     args:
       [
         'build',
-        '-t', 'asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ai-chatbot-frontend:v1',
+        '-t', 'asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ai-chatbot-frontend:v1.2',
         '.'
       ]
 
@@ -13,8 +13,8 @@ steps:
     args:
       [
         'push',
-        'asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ai-chatbot-frontend:v1'
+        'asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ai-chatbot-frontend:v1.2'
       ]
 
 images:
-  - 'asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ai-chatbot-frontend:v1'
+  - 'asia-southeast1-docker.pkg.dev/dev-ops-0/dev-ops-0-dev-repo/ai-chatbot-frontend:v1.2'

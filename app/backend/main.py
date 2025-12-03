@@ -12,9 +12,9 @@ from ray.serve.handle import DeploymentHandle
 
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="Chat!!")
+app = FastAPI(title="Chat!!", root_path="/api")
 
-ray.init(address="ray://ray-service-raycluster-qvw4t-head-svc.default.svc.cluster.local:10001")
+ray.init(address="ray://ray-service-raycluster-8qxqd-head-svc.default.svc.cluster.local:10001")
 # ray.init(address=os.getenv("RAY_ADDRESS"))
 # ray.init(address="auto", ignore_reinit_error=True)
 # logger.info(f"Ray connected? {ray.is_initialized()}")

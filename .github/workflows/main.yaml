@@ -1,0 +1,58 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+
+env:
+  PROJECT_ID: "${{ vars.GCP_PROJECT_ID }}"
+  CLUSTER_NAME: "${{ vars.GKE_CLUSTER_NAME }}"
+  FLEET_LOCATION: "${{ vars.GKE_FLEET_LOCATION }}"
+  ARTIFACT_REGION: "${{ vars.ARTIFACT_REGION }}"
+  WIF_PROVIDER: "${{ secrets.GCP_WIF_PROVIDER }}"
+  WIF_SERVICE_ACCOUNT: "${{ secrets.GCP_WIF_SA_EMAIL }}"
+  REGISTRY: "${{ vars.ARTIFACT_REGION }}-docker.pkg.dev"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: "${{ env.WIF_PROVIDER }}"
+          service_account: "${{ env.WIF_SERVICE_ACCOUNT }}"
+          token_format: 'access_token'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v3
+        with:
+#          project_id: "${{ env.PROJECT_ID }}"
+          install_components: 'gke-gcloud-auth-plugin,kubectl'
+
+      - name: Configure Docker to use gcloud as credential helper
+        run: |
+          gcloud auth configure-docker ${{ env.REGISTRY }}
+
+      - name: Build and Push Ray Model image
+        run: |
+          docker build -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}-dev-repo/ray-chatbot:${{ github.sha }} .
+          docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}-dev-repo/ray-chatbot:${{ github.sha }}
+
+#      - name: Build Ray Model image
+#        run: |
+#          gcloud builds submit \
+#            --project=${{ env.PROJECT_ID }} \
+#            --region=${{ env.ARTIFACT_REGION }} \
+#            --config cloudbuild.yaml --substitutions=_TAG={{ github.sha }} .

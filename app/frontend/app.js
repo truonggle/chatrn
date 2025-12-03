@@ -7,19 +7,12 @@ const resetBtn = document.getElementById('resetBtn');
 
 const conversationId = Math.random().toString(36).substring(7);
 
-function addMessage(text, isUser) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
-    messageDiv.innerHTML = `<p>${text}</p>`;
-    chatBox.appendChild(messageDiv);
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
-
 async function sendMessage() {
     const message = messageInput.value.trim();
     if (!message) return;
 
-    addMessage(message, true);
+    // addMessage(message, true);
+    addMessage(message, 'user');
     messageInput.value = '';
     sendBtn.disabled = true;
 
@@ -40,7 +33,8 @@ async function sendMessage() {
         }
 
         const data = await response.json();
-        addMessage(data.response, false);
+        // addMessage(data.response, false);
+        addMessage(data.response, 'bot');
     } catch (error) {
         console.error('Error:', error);
         addMessage('Sorry, I encountered an error. Please try again.', false);
@@ -57,7 +51,8 @@ async function resetConversation() {
         });
 
         chatBox.innerHTML = '';
-        addMessage("Chat reset! How can I help you today?", false);
+        // addMessage("Chat reset! How can I help you today?", false);
+        addMessage("Chat reset! How can I help you today?", 'bot');
     } catch (error) {
         console.error('Error resetting conversation:', error);
     }
