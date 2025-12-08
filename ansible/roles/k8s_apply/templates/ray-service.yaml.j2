@@ -59,6 +59,7 @@ spec:
         rayStartParams: {}
         template:
           spec:
+            serviceAccountName: app-workload-sa
             containers:
               - name: ray-worker
                 image: "{{ ray_image_base }}:{{ ray_tag }}"
