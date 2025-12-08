@@ -158,7 +158,9 @@ resource "google_project_iam_member" "github_actions_roles" {
     "roles/artifactregistry.writer",
     "roles/container.developer",
     "roles/cloudbuild.builds.editor",
-    "roles/logging.viewer"
+    "roles/logging.viewer",
+    "roles/gkehub.viewer",
+    "roles/gkehub.gatewayReader",
   ])
 
   project = var.project_id
