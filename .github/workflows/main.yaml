@@ -83,7 +83,7 @@ jobs:
 
       - name: Deploy to GKE using Ansible
         run: |
-          ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml
+          ansible-playbook -i inventory/hosts.yaml playbooks/deploy.yaml
         working-directory: ansible
 
       - name: Verify deployments
