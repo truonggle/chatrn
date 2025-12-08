@@ -60,9 +60,34 @@ jobs:
           docker build -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}-dev-repo/ai-chatbot-frontend:${{ github.sha }} -f app/frontend/Dockerfile ./app/frontend
           docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.PROJECT_ID }}-dev-repo/ai-chatbot-frontend:${{ github.sha }}
 
-#      - name: Build Ray Model image
-#        run: |
-#          gcloud builds submit \
-#            --project=${{ env.PROJECT_ID }} \
-#            --region=${{ env.ARTIFACT_REGION }} \
-#            --config cloudbuild.yaml --substitutions=_TAG={{ github.sha }} .
+      - name: Get GKE Credentials
+        run: |
+          gcloud container fleet membership get-credentials ${{ env.CLUSTER_NAME }} \
+          --location ${{ env.FLEET_LOCATION }} \
+          --project ${{ env.PROJECT_ID }}
+
+      - name: Update image tags in Ansible inventory
+        run: |
+          sed -i "s/^backend_tag:.*/backend_tag: \"${{ github.sha }}\"/" ansible/inventory/dev/group_vars/all.yaml
+          sed -i "s/^frontend_tag:.*/frontend_tag: \"${{ github.sha }}\"/" ansible/inventory/dev/group_vars/all.yaml
+          sed -i "s/^ray_tag:.*/ray_tag: \"${{ github.sha }}\"/" ansible/inventory/dev/group_vars/all.yaml
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Ansible and dependencies
+        run: |
+          pip install ansible kubernetes
+
+      - name: Deploy to GKE using Ansible
+        run: |
+          cd ansible
+          ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml
+
+      - name: Verify deployments
+        run: |
+          kubectl get deployments -n default
+          kubectl get services -n default
+          kubectl get pods -n default
