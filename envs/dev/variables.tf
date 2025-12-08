@@ -141,3 +141,13 @@ variable "k8s_namespace" {
   type        = string
   default     = "default"
 }
+
+variable "github_username" {
+  description = "Github username for Workload Identity Pool"
+  type        = string
+}
+
+variable "github_repository" {
+  description = "Github repository name for Workload Identity Pool"
+  type        = string
+}

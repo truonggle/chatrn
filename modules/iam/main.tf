@@ -114,3 +114,61 @@ resource "google_service_account_iam_binding" "dummy_sa_binding" {
   ]
   depends_on = [google_service_account.dummy_sa]
 }
+
+# Workload Identity Pool
+resource "google_iam_workload_identity_pool" "github_pool" {
+  project                   = var.project_id
+  workload_identity_pool_id = "github-pool"
+  display_name              = "GitHub Pool"
+  description               = "Workload Identity Pool for GitHub Actions"
+}
+
+# OIDC Provider
+resource "google_iam_workload_identity_pool_provider" "github_provider" {
+  project                             = var.project_id
+  workload_identity_pool_id           = google_iam_workload_identity_pool.github_pool.workload_identity_pool_id
+  workload_identity_pool_provider_id  = "github-provider"
+  display_name                        = "GitHub OIDC Provider"
+
+  attribute_mapping = {
+    "google.subject" = "assertion.sub"
+    "attribute.actor" = "assertion.actor"
+    "attribute.repository" = "assertion.repository"
+    "attribute.repository_owner" = "assertion.repository_owner"
+  }
+
+  attribute_condition = "assertion.repository_owner == '${var.github_username}'"
+
+  oidc {
+    issuer_uri = "https://token.actions.githubusercontent.com"
+  }
+}
+
+# Service Account for GitHub Actions
+resource "google_service_account" "github_actions" {
+  project = var.project_id
+  account_id = "github-actions-sa"
+  display_name = "GitHub Actions SA"
+  description = "Service account for GitHub Actions"
+}
+
+# IAM Binding to allow GitHub Actions to impersonate the SA
+resource "google_project_iam_member" "github_actions_roles" {
+  for_each = toset([
+    "roles/artifactregistry.writer",
+    "roles/container.developer",
+    "roles/cloudbuild.builds.editor",
+    "roles/logging.viewer"
+  ])
+
+  project = var.project_id
+  role    = each.value
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
+# Workload Identity User Binding
+resource "google_service_account_iam_member" "workload_identity_user" {
+  service_account_id = google_service_account.github_actions.name
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github_pool.name}/attribute.repository/${var.github_username}/${var.github_repository}"
+}

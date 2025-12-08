@@ -5,6 +5,8 @@ module "iam" {
   project_name = var.project_name
   k8s_namespace = var.k8s_namespace
   k8s_service_account = var.k8s_service_account
+  github_username = var.github_username
+  github_repository = var.github_repository
 }
 
 module "vpc" {
