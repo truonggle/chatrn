@@ -115,7 +115,7 @@ variable "secrets" {
   description = "Map of secret names to secret values"
   type        = map(string)
   sensitive   = true
-  default     = {
+  default = {
     db-password = "dev_db_password"
   }
 }

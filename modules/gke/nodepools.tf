@@ -1,9 +1,9 @@
 resource "google_container_node_pool" "cpu_node_pool" {
-  project         = var.project_id
-  name            = "${var.project_name}-${var.env}-cpu-pool"
-  location        = var.region
-  cluster         = google_container_cluster.alpha.name
-  node_locations  = var.node_zones
+  project            = var.project_id
+  name               = "${var.project_name}-${var.env}-cpu-pool"
+  location           = var.region
+  cluster            = google_container_cluster.alpha.name
+  node_locations     = var.node_zones
   initial_node_count = 1
 
   autoscaling {
@@ -12,10 +12,10 @@ resource "google_container_node_pool" "cpu_node_pool" {
   }
 
   node_config {
-    machine_type    = var.cpu_machine_type
-    disk_type       = var.disk_type
-    disk_size_gb    = 50
-    image_type      = var.image_type
+    machine_type = var.cpu_machine_type
+    disk_type    = var.disk_type
+    disk_size_gb = 50
+    image_type   = var.image_type
 
     // For custom sa, gke nodes authenticate using sa credentials, not OAuth scopes.
     service_account = var.gke_node_sa_email

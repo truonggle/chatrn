@@ -1,11 +1,11 @@
 output "gke_node_sa_email" {
   description = "The email of the minimal SA for GKE nodes"
-  value = google_service_account.gke_node_sa.email
+  value       = google_service_account.gke_node_sa.email
 }
 
 output "app_workload_sa_email" {
   description = "The email of the SA for application workloads"
-  value = google_service_account.app_workload_sa.email
+  value       = google_service_account.app_workload_sa.email
 }
 
 output "app_workload_sa_id" {
@@ -34,11 +34,11 @@ output "artifact_registry_sa_email" {
 
 output "workload_identity_provider" {
   description = "Workload Identity Provider resource name"
-  value = google_iam_workload_identity_pool_provider.github_provider.name
-  sensitive = true
+  value       = google_iam_workload_identity_pool_provider.github_provider.name
+  sensitive   = true
 }
 
 output "github_actions_sa_email" {
   description = "The email of the GitHub Actions SA"
-  value = google_service_account.github_actions.email
+  value       = google_service_account.github_actions.email
 }

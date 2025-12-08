@@ -2,10 +2,10 @@ locals {
   all_secrets = merge(
     var.secrets,
     {
-      db-password = module.cloudsql.db_password
-      db-host     = module.cloudsql.private_ip_address
-      db-name     = module.cloudsql.database_name
-      db-user     = module.cloudsql.db_user
+      db-password                = module.cloudsql.db_password
+      db-host                    = module.cloudsql.private_ip_address
+      db-name                    = module.cloudsql.database_name
+      db-user                    = module.cloudsql.db_user
       workload-identity-provider = module.iam.workload_identity_provider
     }
   )

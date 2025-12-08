@@ -1,6 +1,6 @@
 resource "google_project_service" "gke_apis" {
   project = var.project_id
-  count = 3
+  count   = 3
   service = [
     "container.googleapis.com",
     "gkehub.googleapis.com",
@@ -10,16 +10,16 @@ resource "google_project_service" "gke_apis" {
 }
 
 resource "google_container_cluster" "alpha" {
-  name = "${var.project_name}-${var.env}-alpha-gke"
-  project = var.project_id
-  location = var.region
+  name           = "${var.project_name}-${var.env}-alpha-gke"
+  project        = var.project_id
+  location       = var.region
   node_locations = var.node_zones
 
-  network = var.vpc_self_link
+  network    = var.vpc_self_link
   subnetwork = var.gke_subnet_self_link
 
   remove_default_node_pool = true
-  initial_node_count = 1
+  initial_node_count       = 1
 
   private_cluster_config {
     enable_private_endpoint = true
@@ -31,11 +31,11 @@ resource "google_container_cluster" "alpha" {
     cidr_blocks {
       # cidr_block    = var.master_authorized_networks_config[0].cidr_block
       # display_name  = var.master_authorized_networks_config[0].display_name
-      cidr_block = "10.0.0.0/8"
+      cidr_block   = "10.0.0.0/8"
       display_name = "RFC1918 - Class A"
     }
     cidr_blocks {
-      cidr_block = "172.16.0.0/12"
+      cidr_block   = "172.16.0.0/12"
       display_name = "RFC1918 - Class B"
     }
     cidr_blocks {
@@ -45,7 +45,7 @@ resource "google_container_cluster" "alpha" {
   }
 
   ip_allocation_policy {
-    cluster_secondary_range_name = var.pods_ip_range_name
+    cluster_secondary_range_name  = var.pods_ip_range_name
     services_secondary_range_name = var.services_ip_range_name
   }
 
@@ -70,17 +70,17 @@ resource "google_container_cluster" "alpha" {
     }
   }
 
-  logging_service = "logging.googleapis.com/kubernetes"
-  monitoring_service = "monitoring.googleapis.com/kubernetes"
+  logging_service     = "logging.googleapis.com/kubernetes"
+  monitoring_service  = "monitoring.googleapis.com/kubernetes"
   deletion_protection = false
 
   depends_on = [google_project_service.gke_apis]
 }
 
 resource "google_gke_hub_membership" "gke_hub" {
-  project = var.project_id
+  project       = var.project_id
   membership_id = "${var.project_name}-${var.env}-gke-hub"
-  location = "global"
+  location      = "global"
 
   endpoint {
     gke_cluster {
