@@ -12,9 +12,7 @@
 
     - name: Deploy Ray Cluster + Ray Serve
       include_role:
-        name: k8s_apply
+        name: "{{ playbook_dir }}/../roles/k8s_apply"
       vars:
-        ansible_search_path:
-          - "{{ playbook_dir }}/../roles"
         templates:
           - "../roles/k8s_apply/templates/ray-service.yaml.j2"
