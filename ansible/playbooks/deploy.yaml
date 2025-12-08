@@ -15,4 +15,4 @@
         name: k8s_apply
       vars:
         templates:
-          - "../../roles/k8s_apply/templates/ray-service.yaml.j2"
+          - "../roles/k8s_apply/templates/ray-service.yaml.j2"
