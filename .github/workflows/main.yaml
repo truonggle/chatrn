@@ -62,7 +62,7 @@ jobs:
 
       - name: Get GKE Credentials
         run: |
-          gcloud container fleet membership get-credentials ${{ env.CLUSTER_NAME }} \
+          gcloud container fleet memberships get-credentials ${{ env.CLUSTER_NAME }} \
           --location ${{ env.FLEET_LOCATION }} \
           --project ${{ env.PROJECT_ID }}
 
