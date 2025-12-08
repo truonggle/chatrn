@@ -2,6 +2,8 @@
 - name: Orchestrate Full Stack Deployment
   hosts: localhost
   gather_facts: false
+  vars_file:
+    - "../inventory/dev/group_vars/all.yaml"
   vars:
     ray_tag: "latest"
 
