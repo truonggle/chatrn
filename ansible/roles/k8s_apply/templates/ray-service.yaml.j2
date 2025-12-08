@@ -31,6 +31,7 @@ spec:
         num-cpus: '0'
       template:
         spec:
+          serviceAccountName: app-workload-sa
           containers:
             - name: ray-head
               image: "{{ ray_image_base }}:{{ ray_tag }}"
