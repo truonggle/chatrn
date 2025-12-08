@@ -161,6 +161,7 @@ resource "google_project_iam_member" "github_actions_roles" {
     "roles/logging.viewer",
     "roles/gkehub.viewer",
     "roles/gkehub.gatewayReader",
+    "roles/gkehub.gatewayEditor",
   ])
 
   project = var.project_id
